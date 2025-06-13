@@ -1,9 +1,10 @@
 import textwrap
 
 class Menu:
-    
+
     def __init__(self):
-        pass
+        self.user_choice = 0
+        self.quit_choice = ''
     
     def print_welcome(self) -> None:
         welcome = textwrap.dedent("""
@@ -41,21 +42,43 @@ class Menu:
 
     def get_user_choice(self) -> int:
         quit = 't'
-        result = int(input(f"Please make a menu choice: "))
-        if result == 3:
-            while quit != 'y' or quit != 'n':
+        self.user_choice = int(input(f"Please make a menu choice: "))
+        if self.user_choice == 3:
+            while self.quit_choice != 'y' or self.quit_choice != 'n':
                 try:
-                    quit = input("Are you sure you want to quit (y/n): ")
-                    if quit != 'y' and quit != 'n':
+                    self.quit_choice = input("Are you sure you want to quit (y/n): ")
+                    if self.quit_choice != 'y' and self.quit_choice != 'n':
                         raise ValueError
-                    if quit == 'y':
+                    if self.quit_choice == 'y':
                         return 3
                     else:
                         return 0
                 except ValueError:
                     print("Invalid input. Please enter 'y' or 'n'.")
             
-        if result < 1 or result > 3:
+        if self.user_choice < 1 or self.user_choice > 3:
             return -1
 
-        return result 
+        return self.user_choice 
+
+
+    # def execute_menu(self) -> None:
+    #     self.print_welcome()
+    #     self.print_description()
+    #     while self.user_choice != 3:
+    #         self.print_menu()
+    #         try:
+    #             self.user_choice = self.get_user_choice()
+    #             if self.user_choice == -1:
+    #                 raise ValueError
+    #             if self.user_choice == 1:
+    #                 print(f"Test here")
+    #                 my_compute.get_info()
+    #                 my_compute.print_initial_info()
+    #             if self.user_choice == 2:
+    #                 print(f"Results here")
+
+    #         except ValueError as error:
+    #             print(f"Invalid input. Menu choice must be between 1 and 3. Try again.\n")
+            
+    #     self.print_exit()
