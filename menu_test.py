@@ -1,16 +1,36 @@
+#################################################################################
+#   Program Name: Dice Checker
+#
+#   Author: Lex Albrandt
+#
+#   Date: 06/13/25
+#
+#   File Name: menu_test.py
+#
+#   Version: 1.0
+#
+#   File purpose: Glass box testing for all menu functions
+#################################################################################
 import pytest
 from Menu import Menu
+from unittest.mock import Mock
+from Compute import Compute
 
 
 class TestMenu:
     @pytest.fixture
+    # This creates a mock object of compute for testing purposes
+    def mock_compute(self):
+        return Mock(spec=Compute)
 
-    def menu(self):
-        return Menu()
+    @pytest.fixture
+    def menu(self, mock_compute):
+        return Menu(mock_compute)
     
     def test_menu_initialization(self, menu):
-        assert menu.user_choice == 0
-        assert menu.quit_choice == ''
+        assert menu._user_choice == 0
+        assert menu._quit_choice == ''
+        assert isinstance(menu._compute, Mock)
 
     def test_get_user_choice_valid_not_quit(self, menu, monkeypatch, capsys):
         inputs = iter(['5', '2'])
@@ -43,6 +63,8 @@ class TestMenu:
         assert result == 3
         assert "Invalid input. Please enter 'y' or 'n'.\n" in captured
         assert result == 3
+
+    
 
         
         

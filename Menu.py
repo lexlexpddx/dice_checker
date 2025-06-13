@@ -1,18 +1,54 @@
+#################################################################################
+#   Program Name: Dice Checker
+#
+#   Author: Lex Albrandt
+#
+#   Date: 06/13/25
+#
+#   File Name: Menu.py
+#
+#   Version: 1.0
+#
+#   File purpose: Initializes all functions associated with the Menu Class
+#################################################################################
+
 import textwrap
+from Compute import Compute
 
 class Menu:
 
-    def __init__(self):
-        self.user_choice = 0
-        self.quit_choice = ''
+    def __init__(self, compute: Compute):
+        """ Default constructor. Uses dependency injection for the 
+            Compute class
+
+            Args:
+                compute (Compute): Compute class object
+
+            Returns:
+                None 
+        """
+        self._user_choice = 0
+        self._quit_choice = ''
+        self._compute = compute
     
     def print_welcome(self) -> None:
+        """ Function to print the welcome message
+
+            Returns: None
+        """
+
         welcome = textwrap.dedent("""
             Welcome to the Dice Checker! This program will help you determine if your new
             set of dice is fairly weighted.""")
         print(welcome)
     
+
     def print_description(self) -> None:
+        """ Function to print the program description
+        
+            Returns: None
+        """
+
         description = textwrap.dedent("""
             The program uses the Pearson's chi-square test from statistics that computes
             a number that indicates the probability that the sides of the die are rolled
@@ -27,7 +63,13 @@ class Menu:
             Let's start testing your new dice!""")
         print(description)
 
+
     def print_menu(self) -> None:
+        """ Function to print the main menu
+        
+            Returns: None
+        """
+
         menu = textwrap.dedent("""
               Menu
               ---------------------------------
@@ -37,48 +79,82 @@ class Menu:
               """)
         print(menu)
     
+
     def print_exit(self) -> None:
+        """ Function to print the exit message
+
+            Returns: None
+        """
+
         print(f"Thanks for using the Dice Checker! Happy rolling!")
 
+
     def get_user_choice(self) -> int:
-        quit = 't'
-        self.user_choice = int(input(f"Please make a menu choice: "))
-        if self.user_choice == 3:
-            while self.quit_choice != 'y' or self.quit_choice != 'n':
+        """ Function to get the user choice. Also ensures the user does
+           not quit when they are not intending to
+
+            Raises:
+                ValueError: for invalid text option input
+
+            Returns:
+                int: user choice
+        """
+
+        self._user_choice = int(input(f"Please make a menu choice: "))
+        if self._user_choice == 3:
+            while self._quit_choice != 'y' or self._quit_choice != 'n':
                 try:
-                    self.quit_choice = input("Are you sure you want to quit (y/n): ")
-                    if self.quit_choice != 'y' and self.quit_choice != 'n':
+                    self._quit_choice = input("Are you sure you want to quit (y/n): ")
+                    if self._quit_choice != 'y' and self._quit_choice != 'n':
                         raise ValueError
-                    if self.quit_choice == 'y':
+                    if self._quit_choice == 'y':
                         return 3
                     else:
                         return 0
                 except ValueError:
                     print("Invalid input. Please enter 'y' or 'n'.")
             
-        if self.user_choice < 1 or self.user_choice > 3:
+        if self._user_choice < 1 or self._user_choice > 3:
             return -1
 
-        return self.user_choice 
+        return self._user_choice 
 
 
-    # def execute_menu(self) -> None:
-    #     self.print_welcome()
-    #     self.print_description()
-    #     while self.user_choice != 3:
-    #         self.print_menu()
-    #         try:
-    #             self.user_choice = self.get_user_choice()
-    #             if self.user_choice == -1:
-    #                 raise ValueError
-    #             if self.user_choice == 1:
-    #                 print(f"Test here")
-    #                 my_compute.get_info()
-    #                 my_compute.print_initial_info()
-    #             if self.user_choice == 2:
-    #                 print(f"Results here")
+    def execute_menu(self) -> None:
+        """ Function to execute the main menu
 
-    #         except ValueError as error:
-    #             print(f"Invalid input. Menu choice must be between 1 and 3. Try again.\n")
+            Raises:
+                ValueError: For an invalid menu choice 
             
-    #     self.print_exit()
+            Returns: None 
+        """
+
+        self.print_welcome()
+        self.print_description()
+
+        # While the user is not choosing to exit
+        while self._user_choice != 3:
+
+            self.print_menu()
+
+            try:
+                self._user_choice = self.get_user_choice()
+
+                # Invalid input
+                if self._user_choice == -1:
+                    raise ValueError
+                
+                # Option 1
+                # Start test
+                if self._user_choice == 1:
+                    self._compute.get_sides()
+                    self._compute.print_initial_info()
+
+                # Option 2
+                if self._user_choice == 2:
+                    print(f"Results here")
+
+            except ValueError as error:
+                print(f"Invalid input. Menu choice must be between 1 and 3. Try again.\n")
+            
+        self.print_exit()

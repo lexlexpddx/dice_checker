@@ -1,45 +1,79 @@
+#################################################################################
+#   Program Name: Dice Checker
+#
+#   Author: Lex Albrandt
+#
+#   Date: 06/13/25
+#
+#   File Name: Compute.py
+#
+#   Version: 1.0
+#
+#   File purpose: Initializes all function associated with the Compute class
+#################################################################################
+
 import textwrap
 
 class Compute:
-
-    num_sides = 0
-    num_samples = 0
-    deg_free = 0
-    text_input = 'y'
-    int_input = 0
-    valid_choice = False
     
     def __init__(self):
-        pass    
+        """ Default constructor
+        
+            Returns: None
+        """
+        self._num_sides = 0
+        self._num_samples = 0
+        self._deg_free = 0
+        self._expect_freq = 0   
+        self._text_input = ''
+        self._int_input = 0
+        self._valid_choice = False
+
 
     def get_info(self) -> None:
-        self.num_sides = int(input("How many sides does your die have: "))
-        self.deg_free = self.num_sides - 1
-        self.num_samples = self.deg_free * self.num_sides
-        print(f"The minimum number of rolls for your die with {self.num_sides} sides is {self.num_samples}.")
+        """ Wrapper function to get dice info from user
 
-        while not self.valid_choice:
+            Returns: None
+        """
+        self.get_sides()
+        self.get_sample_size()
+
+
+    def get_sides(self) -> None:
+        """ Function to get the number of sides for the die the user wants to test
+        
+            Raises:
+                ValueError: for invalid number of sides
+
+            Returns: None
+        """ 
+
+        while not self._valid_choice:
             try:
-                self.text_input = input("Would you like to use this number (y/n): ")
-                if self.text_input not in ['y', 'n']:
-                    raise ValueError("Must enter 'y' or 'n'")
+                self._num_sides = int(input("How many sides does your die have: "))
+                if self._num_sides not in range(1, 21):
+                    raise ValueError("Number of sides cannot be less than 1 or greater than 20")
 
-                if self.text_input == 'n':
-                    self.int_input = int(input(f"Ok. How many samples would you like to include (must be greater than {self.num_samples}): "))
-                    if self.int_input < self.num_samples:
-                        raise ValueError(f"Must be greater than {self.num_samples}")
-                    self.num_samples = self.int_input
-
-                self.valid_choice = True
-
+                self._valid_choice = True
+                self._deg_free = self._num_sides - 1
+                self._num_samples = self._deg_free * self._num_sides
             except ValueError as e:
-                print(f"Invalid input: {e}")
+                print(f"Invalid input. {e}")
+
+        print(f"The number of rolls you need to perform for your die with {self._num_sides} sides is {self._num_samples}.")
+
+
 
     def print_initial_info(self) -> None:
+        """ Function to print out the info based on user input
+
+            Returns: None
+        """
+
         info = textwrap.dedent(f"""
         Here is the info for your test:
         ---------------------------------
-        Number of sides:        {self.num_sides}
-        Degrees of Freedom:     {self.deg_free}
-        Number of samples:      {self.num_samples}""")
+        Number of sides:        {self._num_sides}
+        Degrees of Freedom:     {self._deg_free}
+        Number of samples:      {self._num_samples}""")
         print(info)
