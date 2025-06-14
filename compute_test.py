@@ -20,8 +20,7 @@ class TestCompute:
     def compute(self):
         return Compute()
 
-
-    def test_compute_initialization(self, compute):
+    def test_compute_initialize(self, compute):
         assert compute._num_sides == 0
         assert compute._num_samples == 0
         assert compute._deg_free == 0
@@ -29,28 +28,15 @@ class TestCompute:
         assert compute._text_input == ''
         assert compute._int_input == 0
         assert compute._valid_choice == False
-
-
-    def test_get_sides_valid(self, compute, monkeypatch):
-        monkeypatch.setattr('builtins.input', lambda _: 20)
-        compute.get_sides()
-        assert compute._num_sides == 20
-        assert compute._deg_free == 19
-        assert compute._num_samples == 380
-
-
-    def test_get_sides_invalid(self, compute, monkeypatch, capsys):
-        inputs = iter(['-4', '0', '21', '6'])
-        monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+        assert isinstance(compute._chi_square_dict, dict)
         
-        compute.get_sides()
-        captured = capsys.readouterr()
 
-        assert "Invalid input. Number of sides cannot be less than 1 or greater than 20" in captured.out
-        assert "Invalid input. Number of sides cannot be less than 1 or greater than 20" in captured.out
-        assert "Invalid input. Number of sides cannot be less than 1 or greater than 20" in captured.out
+        expected_dict = {
+            4 : (7.815,  3),
+            6 : (11.070, 5),
+            8 : (14.067, 7), 
+            10 : (16.919, 9),
+            12 : (19.675, 11),
+            20 : (30.144, 19)}
 
-        assert compute._num_sides == 6
-
-       
-        
+        assert compute._chi_square_dict == expected_dict

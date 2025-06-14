@@ -14,15 +14,17 @@
 
 import textwrap
 from Compute import Compute
+from die import die
 
 class Menu:
 
-    def __init__(self, compute: Compute):
+    def __init__(self, compute: Compute, die: die):
         """ Default constructor. Uses dependency injection for the 
-            Compute class
+            Compute class and die class
 
             Args:
                 compute (Compute): Compute class object
+                die (die): die class object
 
             Returns:
                 None 
@@ -30,6 +32,8 @@ class Menu:
         self._user_choice = 0
         self._quit_choice = ''
         self._compute = compute
+        self._die = die
+
     
     def print_welcome(self) -> None:
         """ Function to print the welcome message
@@ -147,8 +151,8 @@ class Menu:
                 # Option 1
                 # Start test
                 if self._user_choice == 1:
-                    self._compute.get_sides()
-                    self._compute.print_initial_info()
+                    self._die.get_sides()
+                    self._die.print_initial_info()
 
                 # Option 2
                 if self._user_choice == 2:

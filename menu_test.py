@@ -15,6 +15,7 @@ import pytest
 from Menu import Menu
 from unittest.mock import Mock
 from Compute import Compute
+from die import die
 
 
 class TestMenu:
@@ -24,13 +25,18 @@ class TestMenu:
         return Mock(spec=Compute)
 
     @pytest.fixture
-    def menu(self, mock_compute):
-        return Menu(mock_compute)
+    def mock_die(self):
+        return Mock(spec=die)
+
+    @pytest.fixture
+    def menu(self, mock_compute, mock_die):
+        return Menu(mock_compute, mock_die)
     
     def test_menu_initialization(self, menu):
         assert menu._user_choice == 0
         assert menu._quit_choice == ''
         assert isinstance(menu._compute, Mock)
+        assert isinstance(menu._die, Mock)
 
     def test_get_user_choice_valid_not_quit(self, menu, monkeypatch, capsys):
         inputs = iter(['5', '2'])
