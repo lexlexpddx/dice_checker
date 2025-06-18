@@ -18,7 +18,7 @@ from die import die
 
 class Menu:
 
-    def __init__(self, compute: Compute, die: die):
+    def __init__(self, die: die):
         """ Default constructor. Uses dependency injection for the 
             Compute class and die class
 
@@ -31,7 +31,6 @@ class Menu:
         """
         self._user_choice = 0
         self._quit_choice = ''
-        self._compute = compute
         self._die = die
         self._valid_number = False
 
@@ -155,11 +154,13 @@ class Menu:
                     self._die.get_sides()
                     self._die.print_initial_info()
                     self._die.get_roll_entries()
+                    self._die.compute_chi_squared()
+                    self._die.is_fair()
 
                 # Option 2
                 # print chi-squared table
                 if self._user_choice == 2:
-                    self._compute.print_chi_square_table()
+                    self._die.print_chi_square_table()
 
             except ValueError as error:
                 print(f"Invalid input. Menu choice must be between 1 and 3. Try again.\n")

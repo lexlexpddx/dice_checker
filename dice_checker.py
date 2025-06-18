@@ -13,14 +13,12 @@
 #################################################################################
 
 from Menu import Menu
-from Compute import Compute
 from die import die
     
         
 def main():
-    my_compute = Compute()
     my_die = die()
-    menu = Menu(my_compute, my_die)
+    menu = Menu(my_die)
     
     menu.execute_menu()
     

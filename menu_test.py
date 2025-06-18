@@ -19,24 +19,19 @@ from die import die
 
 
 class TestMenu:
-    @pytest.fixture
-    # This creates a mock object of compute for testing purposes
-    def mock_compute(self):
-        return Mock(spec=Compute)
 
     @pytest.fixture
     def mock_die(self):
         return Mock(spec=die)
 
     @pytest.fixture
-    def menu(self, mock_compute, mock_die):
-        return Menu(mock_compute, mock_die)
+    def menu(self, mock_die):
+        return Menu(mock_die)
     
     def test_menu_initialization(self, menu):
         assert menu._user_choice == 0
         assert menu._quit_choice == ''
         assert menu._valid_number == False
-        assert isinstance(menu._compute, Mock)
         assert isinstance(menu._die, Mock)
 
     def test_get_user_choice_valid_not_quit(self, menu, monkeypatch, capsys):
@@ -72,7 +67,7 @@ class TestMenu:
         assert result == 3
 
 
-    
+
         
 
     

@@ -28,13 +28,7 @@ class Compute:
         self._text_input = ''
         self._int_input = 0
         self._valid_choice = False
-        self._chi_square_dict = {
-            4 : (7.815,  3),
-            6 : (11.070, 5),
-            8 : (14.067, 7), 
-            10 : (16.919, 9),
-            12 : (19.675, 11),
-            20 : (30.144, 19)}
+        
 
             
     def print_chi_square_table(self) -> None:
@@ -47,6 +41,8 @@ class Compute:
         print(f"-"*56)
         for sides, (chi_squared, degrees_of_freedom) in self._chi_square_dict.items():
             print(f"{sides:<10}{chi_squared:<23}{degrees_of_freedom:<20}") 
+
+            
 
             
     
