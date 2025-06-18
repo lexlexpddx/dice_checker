@@ -35,6 +35,7 @@ class TestMenu:
     def test_menu_initialization(self, menu):
         assert menu._user_choice == 0
         assert menu._quit_choice == ''
+        assert menu._valid_number == False
         assert isinstance(menu._compute, Mock)
         assert isinstance(menu._die, Mock)
 
@@ -69,6 +70,10 @@ class TestMenu:
         assert result == 3
         assert "Invalid input. Please enter 'y' or 'n'.\n" in captured
         assert result == 3
+
+
+    
+        
 
     
 

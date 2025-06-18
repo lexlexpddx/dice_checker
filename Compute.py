@@ -38,4 +38,17 @@ class Compute:
 
             
     def print_chi_square_table(self) -> None:
+        """ Function to print the chi-squared table values
+        
+            Returns: None
+        """
+
+        print(f"{'Sides':<10}{'Chi-Squared Value':<23}{'Degrees of Freedom':<20}")
+        print(f"-"*56)
+        for sides, (chi_squared, degrees_of_freedom) in self._chi_square_dict.items():
+            print(f"{sides:<10}{chi_squared:<23}{degrees_of_freedom:<20}") 
+
+            
+    
+            
         

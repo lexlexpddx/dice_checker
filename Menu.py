@@ -33,6 +33,7 @@ class Menu:
         self._quit_choice = ''
         self._compute = compute
         self._die = die
+        self._valid_number = False
 
     
     def print_welcome(self) -> None:
@@ -78,7 +79,7 @@ class Menu:
               Menu
               ---------------------------------
               1. Start test
-              2. See results
+              2. Print chi-squared table 
               3. Quit
               """)
         print(menu)
@@ -153,10 +154,12 @@ class Menu:
                 if self._user_choice == 1:
                     self._die.get_sides()
                     self._die.print_initial_info()
+                    self._die.get_roll_entries()
 
                 # Option 2
+                # print chi-squared table
                 if self._user_choice == 2:
-                    print(f"Results here")
+                    self._compute.print_chi_square_table()
 
             except ValueError as error:
                 print(f"Invalid input. Menu choice must be between 1 and 3. Try again.\n")

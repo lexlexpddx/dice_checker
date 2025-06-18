@@ -26,6 +26,7 @@ class Testdie:
         assert die._num_sides == 0
         assert die._deg_free == 0
         assert die._valid_choice == False
+        assert die._side_list == []
 
 
     def test_get_sides_valid(self, die, monkeypatch):
@@ -48,3 +49,28 @@ class Testdie:
         assert "Invalid input. Number of sides cannot be less than 1 or greater than 20" in captured.out
 
         assert die._num_sides == 6
+
+    
+    def test_get_roll_entries_valid(self, die, monkeypatch):
+        die._num_sides = 4
+        inputs = iter(['2', '3', '4', '5'])
+        monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+
+        die.get_roll_entries()
+
+        assert die._side_list[1] == 2
+        assert die._side_list[2] == 3
+        assert die._side_list[3] == 4
+        assert die._side_list[4] == 5
+
+    def test_get_roll_entries_invalid(self, die, monkeypatch):
+        die._num_sides = 4
+        inputs = iter(['-2', '2', '3', '4', '5'])
+        monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+
+        die.get_roll_entries()
+
+        assert die._side_list[1] == 2
+        assert die._side_list[2] == 3
+        assert die._side_list[3] == 4
+        assert die._side_list[4] == 5

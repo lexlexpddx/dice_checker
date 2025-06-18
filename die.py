@@ -13,6 +13,8 @@
 #################################################################################
 
 import textwrap
+import os
+import time
 
 class die:
     
@@ -25,6 +27,7 @@ class die:
         self._num_samples = 0
         self._deg_free = 0
         self._valid_choice = False
+        self._side_list = []
 
 
     def get_sides(self) -> None:
@@ -64,3 +67,49 @@ class die:
         Degrees of Freedom:     {self._deg_free}
         Number of samples:      {self._num_samples}""")
         print(info)
+
+    
+    def get_roll_entries(self) -> int:
+        """ Function for the user to enter roll values
+            for each side of the die
+            
+            Returns: None
+
+            ValueError: invalid roll input, cannot be negative
+        """
+
+        total = 0
+        self._side_list = [0] * (self._num_sides + 1)
+
+        info = textwrap.dedent(f"""
+        This section of the test will ask you to enter the number
+        of rolls for each side of the die your are testing.""")
+        print(info) 
+        time.sleep(5)
+        os.system('cls' if os.name == 'nt' else 'clear')
+        for side in range(1, self._num_sides + 1):
+            side_input = int(input(f"Enter the count for {side}: "))
+            try:
+                if side_input < 0:
+                    self._valid_choice = False
+                    raise ValueError("Number of rolls cannot be less than 0.")
+                else:
+                    self._valid_choice = True
+                    
+            except ValueError as e:
+                print(f"Invalid input. {e}")
+
+            while self._valid_choice == False:
+                side_input = int(input(f"Enter the count for {side}: "))
+                try:
+                    if side_input < 0:
+                        raise ValueError("Number of rolls cannot be less than 0.")
+                    else:
+                        self._valid_choice = True
+                except ValueError as e:
+                    print(f"Invalid input. {e}")
+            self._side_list[side] = side_input
+            total += side_input
+        os.system('cls' if os.name == 'nt' else 'clear')
+        
+        return total
