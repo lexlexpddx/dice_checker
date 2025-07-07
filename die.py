@@ -44,25 +44,47 @@ class die:
 
             Returns: None
         """ 
+        number_print = textwrap.dedent(f"""
+            How many sides does your die have:
+            -----------------------------------------
+            1. 4
+            2. 6
+            3. 8
+            4. 10
+            5. 12
+            6. 20\n""")
 
         while not self._valid_choice:
             try:
-                self._num_sides = int(input("How many sides does your die have: "))
-                if self._num_sides not in range(4, 21):
-                    raise ValueError("Number of sides cannot be less than 4 or greater than 20")
+                print(number_print)
+                num_choice = int(input("Please choose (1-6): "))
+                if num_choice not in range(1, 7):
+                    raise ValueError("Please make a choice between 1 and 6")
+
+                match num_choice:
+                    case 1:
+                        self._num_sides = 4
+                    case 2:
+                        self._num_sides = 6
+                    case 3:
+                        self._num_sides = 8
+                    case 4:
+                        self._num_sides = 10
+                    case 5:
+                        self._num_sides = 12
+                    case 6:
+                        self._num_sides = 20
 
                 self._valid_choice = True
                 self._deg_free = self._num_sides - 1
-                if self._num_sides == 4:
-                    self._num_samples = self._num_sides * 5
-                else:
-                    self._num_samples = self._deg_free * self._num_sides
+                self._num_samples = self._num_sides * 5
                 self._expected_freq = self._num_samples // self._num_sides
+
             except ValueError as e:
                 print(f"Invalid input. {e}")
 
         print(f"\nThe number of rolls you need to perform for your die with {self._num_sides} sides is {self._num_samples}.")
-        time.sleep(5)
+        time.sleep(3)
 
 
     def print_initial_info(self) -> None:
@@ -79,9 +101,60 @@ class die:
         Number of samples:      {self._num_samples}
         Expected Frequency:     {self._expected_freq}""")
         print(info)
-        time.sleep(5)
+        time.sleep(3)
 
     
+    # def get_roll_entries(self) -> None: 
+    #     """ Function for the user to enter roll values
+    #         for each side of the die
+            
+    #         Returns: None
+
+    #         ValueError: invalid roll input, cannot be negative
+    #     """
+
+    #     total = 0
+    #     self._side_list = [0] * (self._num_sides + 1)
+
+    #     while total < self._num_samples:
+    #         total = 0
+
+    #         info = textwrap.dedent(f"""
+    #         The next section of the test will ask you to enter the number
+    #         of rolls for each side of the die your are testing.""")
+    #         print(info) 
+    #         time.sleep(3)
+    #         os.system('cls' if os.name == 'nt' else 'clear')
+    #         for side in range(1, self._num_sides + 1):
+    #             side_input = int(input(f"Enter the count for {side}: "))
+    #             try:
+    #                 if side_input < 0:
+    #                     self._valid_choice = False
+    #                     raise ValueError("Number of rolls cannot be less than 0.")
+    #                 else:
+    #                     self._valid_choice = True
+                        
+    #             except ValueError as e:
+    #                 print(f"Invalid input. {e}")
+
+    #             while self._valid_choice == False:
+    #                 side_input = int(input(f"Enter the count for {side}: "))
+    #                 try:
+    #                     if side_input < 0:
+    #                         raise ValueError("Number of rolls cannot be less than 0.")
+    #                     else:
+    #                         self._valid_choice = True
+    #                 except ValueError as e:
+    #                     print(f"Invalid input. {e}")
+    #             self._side_list[side] = side_input
+    #             total += side_input
+    #         if total < self._num_samples:
+    #             print(f"You only rolled the die {total} times. You must roll the die\n"
+    #                   f"{self._num_samples} times for the test to be valid. Please check your\n"
+    #                   "results and try again")
+    #     time.sleep(3)
+    #     os.system('cls' if os.name == 'nt' else 'clear')     
+
     def get_roll_entries(self) -> None: 
         """ Function for the user to enter roll values
             for each side of the die
@@ -94,45 +167,28 @@ class die:
         total = 0
         self._side_list = [0] * (self._num_sides + 1)
 
+        info = textwrap.dedent(f"""
+        The next section of the test will ask you to enter the number of the 
+        side for each roll. You will be given a tally at the end.""")
+        print(info) 
+        time.sleep(3)
+        os.system('cls' if os.name == 'nt' else 'clear')
+
         while total < self._num_samples:
-            total = 0
+            try:
+                num_entered = int(input(f"Enter the number you rolled: "))
+                if num_entered not in range (1, self._num_sides + 1):
+                    raise ValueError(f"You must enter a number between 1 and {self._num_sides}")
+                self._side_list[num_entered] += 1
+                total += 1
+                print(f"You have {self._num_samples - total} rolls remaining\n")
+                time.sleep(1)
+                os.system('cls' if os.name == 'nt' else 'clear')     
 
-            info = textwrap.dedent(f"""
-            The next section of the test will ask you to enter the number
-            of rolls for each side of the die your are testing.""")
-            print(info) 
-            time.sleep(5)
-            os.system('cls' if os.name == 'nt' else 'clear')
-            for side in range(1, self._num_sides + 1):
-                side_input = int(input(f"Enter the count for {side}: "))
-                try:
-                    if side_input < 0:
-                        self._valid_choice = False
-                        raise ValueError("Number of rolls cannot be less than 0.")
-                    else:
-                        self._valid_choice = True
-                        
-                except ValueError as e:
-                    print(f"Invalid input. {e}")
+            except ValueError as e:
+                print(f"Invalid input. {e}")
 
-                while self._valid_choice == False:
-                    side_input = int(input(f"Enter the count for {side}: "))
-                    try:
-                        if side_input < 0:
-                            raise ValueError("Number of rolls cannot be less than 0.")
-                        else:
-                            self._valid_choice = True
-                    except ValueError as e:
-                        print(f"Invalid input. {e}")
-                self._side_list[side] = side_input
-                total += side_input
-            if total < self._num_samples:
-                print(f"You only rolled the die {total} times. You must roll the die\n"
-                      f"{self._num_samples} times for the test to be valid. Please check your\n"
-                      "results and try again")
-        
-        return
-    
+
     
     def compute_chi_squared(self) -> None:
         """ Function to compute the chi squared value for a given die
@@ -149,7 +205,15 @@ class die:
 
     
     def is_fair(self) -> None:
+        """ Function to determine if the die is fair based on user provided values
+            and calculated p-value
+
+            Returns: None
+        """
+
         self._p_value = 1 - stats.chi2.cdf(self._chi_squared_value, self._deg_free)
-        print(f"p-value: {self._p_value}")
+        print(f"p-value: {self._p_value:.2f}")
         if self._p_value < self._significance_level:
-            print("Not fair")
+            print("Your die failed the chi-squared test!")
+        else:
+            print("Your die passed the chi-squared test!")

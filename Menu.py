@@ -13,7 +13,6 @@
 #################################################################################
 
 import textwrap
-from Compute import Compute
 from die import die
 
 class Menu:
