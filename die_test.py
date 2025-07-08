@@ -62,7 +62,7 @@ class Testdie:
         assert die._num_sides == 20
 
 
-    def test_get_roll_entries_valid(self, die, monkeypatch, capsys):
+    def test_get_roll_entries_valid(self, die, monkeypatch):
         die._num_sides = 4
         die._num_samples = 20
         die._expected_freq = 5
@@ -82,6 +82,35 @@ class Testdie:
 
         total_rolls = sum(die._side_list)
         assert total_rolls == 20
+
+    
+    def test_get_roll_entries_invalid(self, die, monkeypatch, capsys):
+        die._num_sides = 4
+        die._num_samples = 20
+        die._expected_freq = 5
+        
+        inputs = iter(['1', '-1', '0', '5', '1'] + ['2'] * 8 + ['3'] * 4 + ['4'] * 6)
+        monkeypatch.setattr('builtins.input', lambda _: next(inputs))
+        
+        # Patch os.system to do nothing
+        monkeypatch.setattr('os.system', lambda _: None)
+
+        die.get_roll_entries()
+        captured = capsys.readouterr()
+
+        error_message = "Invalid input. You must enter a number between 1 and 4"
+        error_count = captured.out.count(error_message)
+
+        assert error_count == 3
+        
+        assert die._side_list[1] == 2
+        assert die._side_list[2] == 8
+        assert die._side_list[3] == 4
+        assert die._side_list[4] == 6
+
+        total_rolls = sum(die._side_list)
+        assert total_rolls == 20
+
 
     # def test_get_roll_entries_valid(self, die, monkeypatch, capsys):
     #     die._num_sides = 4
