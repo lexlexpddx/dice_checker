@@ -44,9 +44,12 @@ class die:
 
             Returns: None
         """ 
+
+        self._valid_choice = False
+        
         number_print = textwrap.dedent(f"""
             How many sides does your die have:
-            -----------------------------------------
+            ----------------------------------
             1. 4
             2. 6
             3. 8
@@ -160,7 +163,7 @@ class die:
 
         self._p_value = 1 - stats.chi2.cdf(self._chi_squared_value, self._deg_free)
         p_val_info = textwrap.dedent("""
-        In order for your die to be considered fair, we expect the value to be greater than
+        In order for your die to be considered fair, we expect the p-value to be greater than
         or equal to 0.05. If the p-value from your test is less than 0.05 your die are not
         considered fair.\n""")
         print(p_val_info)
@@ -170,3 +173,19 @@ class die:
             print("Your die failed the chi-squared test!")
         else:
             print("Your die passed the chi-squared test!")
+
+        self.print_results()
+
+            
+    def print_results(self) -> None:
+        """ Function to print the results table for roll tallies
+        
+            Returns: None
+        """
+        print()
+        print(f"{'Side number':<12} | {'Tally':<6}")
+        print(f"{'-' * 12}-+-{'-' * 6}")
+        for i in range (1, self._num_sides + 1):
+            print(f"{i:<12} | {self._side_list[i]:<6}")
+        print()
+        print(f"{'Total Rolls':<12} | {sum(self._side_list):<6}")

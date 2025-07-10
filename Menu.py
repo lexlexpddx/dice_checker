@@ -75,9 +75,9 @@ class Menu:
 
         menu = textwrap.dedent("""
               Menu
-              ---------------------------------
+              ----------------------
               1. Start test
-              2. Print chi-squared table 
+              2. Print tally table
               3. Quit
               """)
         print(menu)
@@ -159,7 +159,7 @@ class Menu:
                 # Option 2
                 # print chi-squared table
                 if self._user_choice == 2:
-                    self._die.print_chi_square_table()
+                    self._die.print_results()
 
             except ValueError as error:
                 print(f"Invalid input. Menu choice must be between 1 and 3. Try again.\n")

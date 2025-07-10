@@ -14,12 +14,14 @@
 
 from Menu import Menu
 from die import die
+import os
     
         
 def main():
     my_die = die()
     menu = Menu(my_die)
     
+    os.system('cls' if os.name == 'nt' else 'clear')
     menu.execute_menu()
     
 if __name__ == "__main__":
