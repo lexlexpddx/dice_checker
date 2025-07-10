@@ -102,58 +102,7 @@ class die:
         Expected Frequency:     {self._expected_freq}""")
         print(info)
         time.sleep(3)
-
     
-    # def get_roll_entries(self) -> None: 
-    #     """ Function for the user to enter roll values
-    #         for each side of the die
-            
-    #         Returns: None
-
-    #         ValueError: invalid roll input, cannot be negative
-    #     """
-
-    #     total = 0
-    #     self._side_list = [0] * (self._num_sides + 1)
-
-    #     while total < self._num_samples:
-    #         total = 0
-
-    #         info = textwrap.dedent(f"""
-    #         The next section of the test will ask you to enter the number
-    #         of rolls for each side of the die your are testing.""")
-    #         print(info) 
-    #         time.sleep(3)
-    #         os.system('cls' if os.name == 'nt' else 'clear')
-    #         for side in range(1, self._num_sides + 1):
-    #             side_input = int(input(f"Enter the count for {side}: "))
-    #             try:
-    #                 if side_input < 0:
-    #                     self._valid_choice = False
-    #                     raise ValueError("Number of rolls cannot be less than 0.")
-    #                 else:
-    #                     self._valid_choice = True
-                        
-    #             except ValueError as e:
-    #                 print(f"Invalid input. {e}")
-
-    #             while self._valid_choice == False:
-    #                 side_input = int(input(f"Enter the count for {side}: "))
-    #                 try:
-    #                     if side_input < 0:
-    #                         raise ValueError("Number of rolls cannot be less than 0.")
-    #                     else:
-    #                         self._valid_choice = True
-    #                 except ValueError as e:
-    #                     print(f"Invalid input. {e}")
-    #             self._side_list[side] = side_input
-    #             total += side_input
-    #         if total < self._num_samples:
-    #             print(f"You only rolled the die {total} times. You must roll the die\n"
-    #                   f"{self._num_samples} times for the test to be valid. Please check your\n"
-    #                   "results and try again")
-    #     time.sleep(3)
-    #     os.system('cls' if os.name == 'nt' else 'clear')     
 
     def get_roll_entries(self) -> None: 
         """ Function for the user to enter roll values
@@ -201,8 +150,6 @@ class die:
             observed_value = self._side_list[i]
             self._chi_squared_value += ((observed_value - self._expected_freq) ** 2) / self._expected_freq
 
-        print(f"Chi-squared value: {self._chi_squared_value}")
-
     
     def is_fair(self) -> None:
         """ Function to determine if the die is fair based on user provided values
@@ -212,7 +159,13 @@ class die:
         """
 
         self._p_value = 1 - stats.chi2.cdf(self._chi_squared_value, self._deg_free)
-        print(f"p-value: {self._p_value:.2f}")
+        p_val_info = textwrap.dedent("""
+        In order for your die to be considered fair, we expect the value to be greater than
+        or equal to 0.05. If the p-value from your test is less than 0.05 your die are not
+        considered fair.\n""")
+        print(p_val_info)
+        time.sleep(3)
+        print(f"The p-value for your die: {self._p_value:.2f}")
         if self._p_value < self._significance_level:
             print("Your die failed the chi-squared test!")
         else:
